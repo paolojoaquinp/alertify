@@ -10,10 +10,6 @@ extension type AuthService(FirebaseAuth auth,) {
   }) async {
     try {
 
-    } on FirebaseAuthException {
-      return Error(
-        
-      );
     } catch (e) {
       return Error(SignInAuthFailure.unknown);
     }

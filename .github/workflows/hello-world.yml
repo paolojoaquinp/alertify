@@ -1,0 +1,11 @@
+name: Hello World Alertify
+on:
+    push:
+        branches:
+            - github-actions/initial
+jobs:
+    hellowrold: 
+        runs-on: macos-latest
+        steps:
+            - name: Hello World
+              run: echo "Hello World"
