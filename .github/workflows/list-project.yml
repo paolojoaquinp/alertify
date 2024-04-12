@@ -1,0 +1,11 @@
+name: Hello World Alertify
+on:
+    push:
+        branches:
+            - github-actions/initial
+jobs:
+    listprojects: 
+        runs-on: macos-latest
+        steps:
+            - name: Listar antes de checkout
+              run: ls
