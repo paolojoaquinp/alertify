@@ -21,7 +21,7 @@ jobs:
         runs-on: macos-latest
         steps:
             - name: COPY .
-              uses: actions/checkou@v4
+              uses: actions/checkout@v4
             - name: INSTALACION DE JAVA
               uses: actions/setup-java@v4
               with:
