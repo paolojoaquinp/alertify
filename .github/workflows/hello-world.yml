@@ -7,5 +7,9 @@ jobs:
     hellowrold: 
         runs-on: macos-latest
         steps:
-            - name: Hello World
-              run: echo "Hello World"
+            - name: List before checkout
+              run: ls
+            - name: Checkout
+              uses: actions/checkout@v3 # This is the action that checks out the repository
+            - name: List after checkout
+              run: ls
