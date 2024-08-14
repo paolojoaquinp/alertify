@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "865785082084",
+    "project_id": "alertify-6ba22",
+    "storage_bucket": "alertify-6ba22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865785082084:android:44dff0aafa459d9b267cf1",
+        "android_client_info": {
+          "package_name": "dev.fluttermasters.alertify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg1-nLtR9wa8ekI1ut0ypFbeFWdsb5LGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
