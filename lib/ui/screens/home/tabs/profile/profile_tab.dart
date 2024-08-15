@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../services/auth_service.dart';
 import '../../../../shared/extensions/build_context.dart';
 import '../../../../shared/theme/palette.dart';
+import '../../../auth/auth_screen.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -32,7 +35,10 @@ class ProfileTab extends StatelessWidget {
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  AuthService(FirebaseAuth.instance).logout().whenComplete(
+                      () => context.pushNamedAndRemoveUntil(AuthScreen.route));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Palette.darkGray,
                 ),
