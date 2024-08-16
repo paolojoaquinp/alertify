@@ -3,6 +3,7 @@ import 'package:alertify/failures/auth_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../core/result.dart';
+import '../entities/app_user.dart';
 
 extension type AuthService(FirebaseAuth auth) {
   FutureAuthResult<void, SignInAuthFailure> signIn({
@@ -27,7 +28,7 @@ extension type AuthService(FirebaseAuth auth) {
     }
   }
 
-  FutureAuthResult<void, SignUpAuthFailure> signUp({
+  FutureAuthResult<AppUser, SignUpAuthFailure> signUp({
     required String email,
     required String password,
   }) async {
@@ -38,7 +39,12 @@ extension type AuthService(FirebaseAuth auth) {
       );
       final user = credentials.user;
       if(user != null) {
-        return Success(null);
+        return Success(AppUser(
+          id: user.uid,
+          email: email,
+          username: user.displayName ?? '',
+          photoUrl: user.photoURL,
+        ));
       }
       return Error(SignUpAuthFailure.userNotCreate);
     } on FirebaseAuthException catch (e) {
@@ -56,4 +62,6 @@ extension type AuthService(FirebaseAuth auth) {
   bool get logged => auth.currentUser != null;
 
   Future<void> logout() => auth.signOut();
+
+  String get currentUserId => auth.currentUser!.uid;
 }

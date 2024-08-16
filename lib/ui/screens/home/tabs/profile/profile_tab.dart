@@ -1,55 +1,110 @@
+import 'package:alertify/entities/app_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/result.dart';
 import '../../../../../services/auth_service.dart';
+import '../../../../../services/user_service.dart';
 import '../../../../shared/extensions/build_context.dart';
 import '../../../../shared/theme/palette.dart';
 import '../../../auth/auth_screen.dart';
 
-class ProfileTab extends StatelessWidget {
+sealed class ProfileState {}
+
+class ProfileLoadingState extends ProfileState {}
+
+class ProfileLoadedState extends ProfileState {
+  final AppUser user;
+  ProfileLoadedState({required this.user});
+}
+
+class ProfileLoadErrorState extends ProfileState {
+  final String message;
+
+  ProfileLoadErrorState({required this.message});
+}
+
+
+class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
+
+  @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  ProfileState state = ProfileLoadingState();
+  final authService = AuthService(FirebaseAuth.instance);
+  final userService = UserService(FirebaseFirestore.instance);
+  late final currentUserId = authService.currentUserId;
+  
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => loadUser());
+    super.initState();
+  }
+  
+  Future<void> loadUser() async {
+    setState(() => state = ProfileLoadingState());
+    final result = await userService.userFromId(currentUserId);
+    state = switch (result) {
+      Success(value: final user) => ProfileLoadedState(user: user),
+      Error(value: final failure) => ProfileLoadErrorState(message: failure.message),
+    };
+    
+    setState(() {});
+  }
+
+  void logout() async {
+    authService.logout().whenComplete(
+            () => context.pushNamedAndRemoveUntil(AuthScreen.route));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: context.theme.scaffoldBackgroundColor,
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 50),
-              const CircleAvatar(radius: 50),
-              const SizedBox(height: 10),
-              const Text(
-                'username',
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                'email',
-                style: context.theme.textTheme.bodyMedium?.copyWith(
-                  color: Palette.darkGray,
+        child: switch (state) {
+          ProfileLoadingState() => Center(child: CircularProgressIndicator(),),
+          ProfileLoadErrorState(message: final message) => Center(
+            child: Text(message),
+          ), 
+          ProfileLoadedState(user: final user) => Padding(
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 50),
+                const CircleAvatar(radius: 50),
+                const SizedBox(height: 10),
+                Text(
+                  user.username,
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () {
-                  AuthService(FirebaseAuth.instance).logout().whenComplete(
-                      () => context.pushNamedAndRemoveUntil(AuthScreen.route));
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Palette.darkGray,
+                Text(
+                  user.email,
+                  style: context.theme.textTheme.bodyMedium?.copyWith(
+                    color: Palette.darkGray,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                child: const Text(
-                  'Sign Out',
-                  style: TextStyle(color: Palette.pink),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: logout,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Palette.darkGray,
+                  ),
+                  child: const Text(
+                    'Sign Out',
+                    style: TextStyle(color: Palette.pink),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        }
       ),
     );
   }
