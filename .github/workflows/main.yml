@@ -30,8 +30,9 @@ jobs:
       - name: INSTALACION DE FIREBASE TOOLS
         run: npm install -g firebase-tools
 
-      - name: Set up Flutter
+      - name: INSTALL FLUTTER
         uses: subosito/flutter-action@v2
         with:
-          channel: "3.24.0"
+          channel: stable
+          flutter-version-file: pubspec.yaml # path to pubspec.yaml
       - run: flutter --version
