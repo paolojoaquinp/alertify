@@ -1,4 +1,14 @@
 # 1. INSTALAR FLUTTER
+# 2. INSTALAR FLUTTER
+# 3. GENERAR UNA APK
+# 4. GUARD
+#     - flutter analyze
+#     - flutter test
+# 5. GENERAR IPA
+#     - INSTALAR PERFIL TEMPORAL
+#     - INSTALAR CERTIFICADOS
+# 6. APP DISTRIBUTION CLI
+#     - firebase tools
 
 name: FLUTTER_MASTER_1
 on:
@@ -14,3 +24,7 @@ jobs:
         uses: actions/checkout@v4
       - run: echo '${{vars.HELLO_WORLD_VAR}}'
       - run: echo '${{secrets.HELLO_VAR_WORLD}}'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '21'
