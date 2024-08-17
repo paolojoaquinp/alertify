@@ -1,0 +1,12 @@
+name: FLUTTER_MASTER_1
+on:
+  push:
+    branches:
+      - gh-actions/alertify
+
+jobs:
+  flutter_master_dev:
+    runs-on: macos-latest
+    steps:
+      - name: COPY .
+        uses: actions/checkout@v4
