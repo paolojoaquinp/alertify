@@ -1,3 +1,5 @@
+# 1. INSTALAR FLUTTER
+
 name: FLUTTER_MASTER_1
 on:
   push:
@@ -11,4 +13,4 @@ jobs:
       - name: COPY .
         uses: actions/checkout@v4
       - run: echo '${{vars.HELLO_WORLD_VAR}}'
-      - run: echo '${{secrets.HELLO_WORLD_VAR}}'
+      - run: echo '${{secrets.HELLO_VAR_WORLD}}'
