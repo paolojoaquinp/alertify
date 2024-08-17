@@ -1,0 +1,11 @@
+name: List Project
+on:
+  push:
+    branches:
+      - gh-actions/init
+jobs:
+  helloworld:
+    runs-on: macos-latest
+    steps:
+      - name: List before checkout
+        run: ls
