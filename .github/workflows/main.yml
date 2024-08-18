@@ -35,3 +35,7 @@ jobs:
           channel: stable
           flutter-version: 3.19.0
       - run: flutter --version
+      - name: FLUTTER TEST
+        run: flutter test
+      - name: FLUTTER ANALYZE
+        run: flutter analyze
