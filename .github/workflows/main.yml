@@ -1,4 +1,4 @@
-# 1. INSTALAR FLUTTER
+# 1. INSTALAR FLUTTER 
 # 2. INSTALAR FLUTTER
 # 3. GENERAR UNA APK
 # 4. GUARD
@@ -7,8 +7,12 @@
 # 5. GENERAR IPA
 #     - INSTALAR PERFIL TEMPORAL
 #     - INSTALAR CERTIFICADOS
+#     - CONFIGURAR KEY CHAIN
 # 6. APP DISTRIBUTION CLI
 #     - firebase tools
+#     - google-application-credential.json
+# 7. artifact
+# 8. CACHE STRATEGY
 
 name: FLUTTER_MASTER_1
 on:
@@ -19,7 +23,18 @@ on:
 jobs:
   flutter_master_dev:
     runs-on: macos-latest
+    env: 
+      GOOGLE_APLICATION_CREDENTIAL: google-application-credential.json
     steps:
+      - name: Cache Primes
+        id: cache-primes
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules/ 
+            **/Users/runner/
+          key: ${{ runner.os }}-primes
+ 
       - name: COPY .
         uses: actions/checkout@v4
       - name: INSTALACION DE JAVA
@@ -42,8 +57,9 @@ jobs:
       - name: GENERAR APK
         run: flutter build apk --release
         
-      - uses: actions/upload-artifact@v4
+      - name: ARTIFACT
+        uses: actions/upload-artifact@v4
         with:
           name: apk-and-ipa
           path: |
-            build/app/outputs/flutter-apk/app-release.apk # or path/to/artifact
+            build/app/outputs/flutter-apk/app-release.apk
