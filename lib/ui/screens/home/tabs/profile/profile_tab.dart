@@ -1,4 +1,4 @@
-import 'package:alertify/entities/app_user.dart';
+import '../../../../../entities/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +67,7 @@ class _ProfileTabState extends State<ProfileTab> {
       color: context.theme.scaffoldBackgroundColor,
       child: SafeArea(
         child: switch (state) {
-          ProfileLoadingState() => Center(child: CircularProgressIndicator(),),
+          ProfileLoadingState() => const Center(child: CircularProgressIndicator(),),
           ProfileLoadErrorState(message: final message) => Center(
             child: Text(message),
           ), 

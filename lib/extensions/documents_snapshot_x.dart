@@ -1,5 +1,5 @@
-import 'package:alertify/core/typedefs.dart';
-import 'package:alertify/entities/app_user.dart';
+import '../core/typedefs.dart';
+import '../entities/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 extension DocumentsSnapshotX on DocumentSnapshot<Json> {

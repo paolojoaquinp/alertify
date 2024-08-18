@@ -1,5 +1,5 @@
-import 'package:alertify/core/typedefs.dart';
-import 'package:alertify/failures/auth_failure.dart';
+import '../core/typedefs.dart';
+import '../failures/auth_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../core/result.dart';

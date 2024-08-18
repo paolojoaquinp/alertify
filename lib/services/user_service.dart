@@ -1,7 +1,7 @@
-import 'package:alertify/core/result.dart';
-import 'package:alertify/core/typedefs.dart';
-import 'package:alertify/entities/app_user.dart';
-import 'package:alertify/failures/failure.dart';
+import '../core/result.dart';
+import '../core/typedefs.dart';
+import '../entities/app_user.dart';
+import '../failures/failure.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../extensions/documents_snapshot_x.dart';
