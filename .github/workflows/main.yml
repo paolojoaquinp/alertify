@@ -42,18 +42,28 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
+
       - name: INSTALACION DE FIREBASE TOOLS
         run: npm install -g firebase-tools
+
       - name: INSTALL FLUTTER
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.24.0
       - run: flutter --version
+
       - name: FLUTTER TEST
         run: flutter test
+
       - name: FLUTTER ANALYZE
         run: flutter analyze
+
+      - name: GOOGLE_CREDENTIAL
+        shell: bash
+        run: |
+          echo '${{secrets.JSON_APP_CREDENTIAL_ACCESS}}' | base64 --decode > "google-application-credential.json"
+
       - name: GENERAR APK
         run: flutter build apk --release
         
