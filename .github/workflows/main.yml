@@ -67,6 +67,9 @@ jobs:
       - name: GENERAR APK
         run: flutter build apk --release
         
+      - name: UPLOAD APK DISTRIBUTION
+        run: firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app 1:865785082084:android:44dff0aafa459d9b267cf1 --groups "testers"
+
       - name: ARTIFACT
         uses: actions/upload-artifact@v4
         with:
