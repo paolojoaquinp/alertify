@@ -24,7 +24,7 @@ jobs:
   flutter_master_dev:
     runs-on: macos-latest
     env: 
-      GOOGLE_APLICATION_CREDENTIAL: google-application-credential.json
+      GOOGLE_APLICATION_CREDENTIAL: google-application-credentials.json
     steps:
       - name: Cache Primes
         id: cache-primes
@@ -62,11 +62,14 @@ jobs:
       - name: GOOGLE_CREDENTIAL
         shell: bash
         run: |
-          echo '${{secrets.JSON_APP_CREDENTIAL_ACCESS}}' | base64 --decode > "google-application-credential.json"
+          echo '${{secrets.JSON_APP_CREDENTIAL_ACCESS}}' | base64 --decode > "google-application-credentials.json"
 
       - name: GENERAR APK
         run: flutter build apk --release
         
+      - name: GENERAR IPA
+        run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+
       - name: UPLOAD APK DISTRIBUTION
         run: firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app 1:865785082084:android:44dff0aafa459d9b267cf1 --groups "testers"
 
