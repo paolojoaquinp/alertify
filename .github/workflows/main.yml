@@ -109,3 +109,10 @@ jobs:
           name: apk-and-ipa
           path: |
             build/app/outputs/flutter-apk/app-release.apk
+  flutter_master_prod: 
+    runs-on: macos-latest
+    environment: production
+
+    steps:
+        - name: SAMPLE
+          run: echo "${{ secrets.HELLO_MOM }}"
