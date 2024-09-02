@@ -1,77 +1,31 @@
-import 'package:alertify/entities/app_user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:alertify/ui/shared/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/result.dart';
-import '../../../../../services/auth_service.dart';
-import '../../../../../services/user_service.dart';
 import '../../../../shared/extensions/build_context.dart';
-import '../../../../shared/theme/palette.dart';
-import '../../../auth/auth_screen.dart';
+import 'controller/profile_tab_controller.dart';
 
-sealed class ProfileState {}
-
-class ProfileLoadingState extends ProfileState {}
-
-class ProfileLoadedState extends ProfileState {
-  final AppUser user;
-  ProfileLoadedState({required this.user});
-}
-
-class ProfileLoadErrorState extends ProfileState {
-  final String message;
-
-  ProfileLoadErrorState({required this.message});
-}
-
-
-class ProfileTab extends StatefulWidget {
+class ProfileTab extends ConsumerWidget {
   const ProfileTab({super.key});
 
-  @override
-  State<ProfileTab> createState() => _ProfileTabState();
-}
+  // ProfileState state = ProfileLoadingState();
+  // final authService = AuthService(FirebaseAuth.instance);
+  // final userService = UserService(FirebaseFirestore.instance);
+  // late final currentUserId = authService.currentUserId;
 
-class _ProfileTabState extends State<ProfileTab> {
-  ProfileState state = ProfileLoadingState();
-  final authService = AuthService(FirebaseAuth.instance);
-  final userService = UserService(FirebaseFirestore.instance);
-  late final currentUserId = authService.currentUserId;
-  
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => loadUser());
-    super.initState();
-  }
-  
-  Future<void> loadUser() async {
-    setState(() => state = ProfileLoadingState());
-    final result = await userService.userFromId(currentUserId);
-    state = switch (result) {
-      Success(value: final user) => ProfileLoadedState(user: user),
-      Error(value: final failure) => ProfileLoadErrorState(message: failure.message),
-    };
-    
-    setState(() {});
-  }
-
-  void logout() async {
-    authService.logout().whenComplete(
-            () => context.pushNamedAndRemoveUntil(AuthScreen.route));
-  }
+  // void logout() async {
+  //   authService.logout().whenComplete(
+  //           () => context.pushNamedAndRemoveUntil(AuthScreen.route));
+  // }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileData = ref.watch(profileDataProvider);
     return Material(
       color: context.theme.scaffoldBackgroundColor,
       child: SafeArea(
-        child: switch (state) {
-          ProfileLoadingState() => Center(child: CircularProgressIndicator(),),
-          ProfileLoadErrorState(message: final message) => Center(
-            child: Text(message),
-          ), 
-          ProfileLoadedState(user: final user) => Padding(
+        child: profileData.when(
+          data: (user) => Padding(
             padding: const EdgeInsets.all(25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -92,7 +46,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: logout,
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Palette.darkGray,
                   ),
@@ -104,7 +58,13 @@ class _ProfileTabState extends State<ProfileTab> {
               ],
             ),
           ),
-        }
+          error: (_, __) => const Center(
+            child: Text('Oops you have an error'),
+          ),
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
       ),
     );
   }
